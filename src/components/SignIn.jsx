@@ -2,24 +2,75 @@ import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import AllContext from "../contexts/AllContext";
+import { API } from "../api/API";
+import { GoogleAuthProvider } from "firebase/auth";
 
 const SignIn = () => {
-  const { loading } = useContext(AllContext);
+  const { loading, loginWithPassword, loginWithPopUp, setLoading, setUser } =
+    useContext(AllContext);
   const navigate = useNavigate();
 
   // State for form fields and verification
-
   const [emailRegister, setEmailRegister] = useState("");
 
-  // Handle Google login (dummy function)
-  const handleSignIn = () => {
-    // Implement Google login functionality here
-    toast.info("Google login feature coming soon!");
-    navigate("/");
+  // Handle password login
+  const handlePasswordLogin = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const form = e.target;
+    const emailLogin = form.emailRegister.value; // Correct field name
+    const passwordLogin = form.passwordRegister.value; // Correct field name
+    loginWithPassword(emailLogin, passwordLogin)
+      .then((res) => {
+        const usr = res.user;
+        setUser(usr);
+        toast.success("You are Logged in!");
+        setLoading(false);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setLoading(false);
+        toast.error("User Login Failed!");
+      });
   };
+
+  // Handle Google login
+  const googleProvider = new GoogleAuthProvider();
   const handleGoogleLogin = () => {
-    // Implement Google login functionality here
-    toast.info("Google login feature coming soon!");
+    loginWithPopUp(googleProvider)
+      .then((res) => {
+        const user = res.user;
+        setUser(user);
+
+        // Only save user data to server for Google login
+        const newUser = {
+          uid: res.user.uid,
+          email: res.user.email,
+          displayName: res.user.displayName,
+          photoURL: res.user.photoURL,
+        };
+
+        // Save the user data to the server (only for Google login)
+        API.post("/users", newUser)
+          .then((res) => {
+            if (res.data.insertedId) {
+              navigate("/");
+              toast.success("User registered successfully!");
+            } else {
+              navigate("/");
+              toast.success("You are Logged in!");
+            }
+          })
+          .catch((err) => {
+            console.error("Error Creating Item:", err.message);
+            toast.error("Failed to Add User!");
+          });
+      })
+      .catch((err) => {
+        console.log(err.message);
+        toast.error("User Login Failed!");
+      });
   };
 
   return (
@@ -27,7 +78,7 @@ const SignIn = () => {
       <h1 className="text-2xl font-bold text-center mb-4">Sign In</h1>
 
       {/* Sign-In Form */}
-      <form onSubmit={handleSignIn} className="space-y-2">
+      <form onSubmit={handlePasswordLogin} className="space-y-2">
         {/* Email */}
         <div>
           <label
@@ -39,8 +90,8 @@ const SignIn = () => {
           <input
             className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
             type="email"
-            id="emailRegister"
-            name="emailRegister"
+            id="emailRegister" // Correct id
+            name="emailRegister" // Correct name
             placeholder="Email address"
             value={emailRegister}
             onChange={(e) => setEmailRegister(e.target.value)}
@@ -59,8 +110,8 @@ const SignIn = () => {
           <input
             className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
             type="password"
-            id="passwordRegister"
-            name="passwordRegister"
+            id="passwordRegister" // Correct id
+            name="passwordRegister" // Correct name
             placeholder="Password"
             required
           />
@@ -68,7 +119,7 @@ const SignIn = () => {
 
         <button
           type="submit"
-          className="mt-2 w-full text-white bg-black/80  bg-blur-md py-2 rounded-md font-medium hover:bg-primary/70 transition"
+          className="mt-2 w-full text-white bg-black/80 bg-blur-md py-2 rounded-md font-medium hover:bg-primary/70 transition"
           disabled={loading}
         >
           {loading ? "Signing In..." : "Sign In"}
@@ -78,7 +129,7 @@ const SignIn = () => {
       {/* Google Login Button */}
       <button
         onClick={handleGoogleLogin}
-        className="mt-4 w-full text-white bg-black/80  bg-blur-md py-2 rounded-md font-medium hover:bg-primary/70 transition"
+        className="mt-4 w-full text-white bg-black/80 bg-blur-md py-2 rounded-md font-medium hover:bg-primary/70 transition"
       >
         Sign Up with Google
       </button>

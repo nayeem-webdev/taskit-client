@@ -4,8 +4,8 @@ import { IoClose } from "react-icons/io5";
 import AllContext from "../contexts/AllContext";
 import { API } from "../api/API";
 import { toast } from "react-toastify";
-// refetch
-const AddTaskModal = ({ isOpen, onClose }) => {
+
+const AddTaskModal = ({ isOpen, onClose, refetch }) => {
   const { user } = useContext(AllContext);
 
   const [taskData, setTaskData] = useState({
@@ -46,7 +46,7 @@ const AddTaskModal = ({ isOpen, onClose }) => {
         category: "Todo",
         timestamp: new Date().toISOString(),
       });
-      // refetch();
+      refetch();
       onClose(); // Close modal after successful submission
     } catch (error) {
       console.error("Error adding task:", error.message);
@@ -162,7 +162,7 @@ const AddTaskModal = ({ isOpen, onClose }) => {
 AddTaskModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  // refetch: PropTypes.func,
+  refetch: PropTypes.func.isRequired,
 };
 
 export default AddTaskModal;

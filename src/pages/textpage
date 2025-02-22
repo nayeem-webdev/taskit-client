@@ -1,0 +1,50 @@
+const { destination, source, draggableId } = result;
+
+    if (!destination) return;
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    const sourceList = getList(source.droppableId);
+    const destinationList = getList(destination.droppableId);
+
+    const newSourceList = Array.from(sourceList);
+    const newDestinationList = Array.from(destinationList);
+
+    const [removed] = newSourceList.splice(source.index, 1);
+
+    if (destination.droppableId === "todoToday") {
+      removed.dueDate = today;
+    } else if (destination.droppableId === "todoTomorrow") {
+      removed.dueDate = tomorrowDate;
+    } else if (destination.droppableId === "todoComplete") {
+      removed.category = "Done";
+    } else if (destination.droppableId === "todoPending") {
+      removed.category = "Pending";
+    }
+
+    newDestinationList.splice(destination.index, 0, removed);
+
+    API.put(`/tasks/${removed._id}`, removed)
+      .then(() => refetch())
+      .catch((error) => console.error("Failed to update task:", error));
+
+
+
+      const getList = (droppableId) => {
+    switch (droppableId) {
+      case "todoToday":
+        return [...todoToday];
+      case "todoTomorrow":
+        return [...todoTomorrow];
+      case "todoComplete":
+        return [...todoComplete];
+      case "todoPending":
+        return [...todoPending];
+      default:
+        return [];
+    }
+  };
