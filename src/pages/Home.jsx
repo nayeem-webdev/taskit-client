@@ -1,4 +1,5 @@
 import HomeNoUser from "../components/HomeNoUser";
+import { MdDeleteForever } from "react-icons/md";
 import { LuGripVertical } from "react-icons/lu";
 import {
   IoCheckmarkDoneCircleOutline,
@@ -44,6 +45,23 @@ const Home = () => {
     tasks?.filter((task) => task.dueDate === tomorrowDate) || [];
   const todoComplete = tasks?.filter((task) => task.category === "Done") || [];
   const todoPending = tasks?.filter((task) => task.category !== "Done") || [];
+
+  const handleDelete = (id) => {
+    console.log(id);
+    API.delete(`/task/del/${id}`)
+      .then(() => {
+        toast.success("Task Deleted Successfully!");
+        refetch();
+      })
+      .catch((error) => {
+        console.log("Error updating task:", error);
+        toast.error("Delete Task Failed!");
+      });
+  };
+
+  const handleViewCard = (id) => {
+    console.log(id);
+  };
 
   const onDragEnd = (result) => {
     console.log(result);
@@ -142,8 +160,16 @@ const Home = () => {
                                   ? t.title.slice(0, 20) + "..."
                                   : t.title}
                               </h2>
-                              <div {...provided.dragHandleProps}>
-                                <LuGripVertical className="text-gray-600" />
+                              <div className="flex gap-2">
+                                <button
+                                  className="text-red-400 hover:text-red-800"
+                                  onClick={() => handleDelete(t._id)}
+                                >
+                                  <MdDeleteForever />
+                                </button>
+                                <div {...provided.dragHandleProps}>
+                                  <LuGripVertical className="text-gray-600" />
+                                </div>
                               </div>
                             </div>
                           )}
@@ -194,8 +220,16 @@ const Home = () => {
                                   ? t.title.slice(0, 20) + "..."
                                   : t.title}
                               </h2>
-                              <div {...provided.dragHandleProps}>
-                                <LuGripVertical className="text-gray-600" />
+                              <div className="flex gap-2">
+                                <button
+                                  className="text-red-400 hover:text-red-800"
+                                  onClick={() => handleDelete(t._id)}
+                                >
+                                  <MdDeleteForever />
+                                </button>
+                                <div {...provided.dragHandleProps}>
+                                  <LuGripVertical className="text-gray-600" />
+                                </div>
                               </div>
                             </div>
                           )}
@@ -247,8 +281,16 @@ const Home = () => {
                                   ? t.title.slice(0, 20) + "..."
                                   : t.title}
                               </h2>
-                              <div {...provided.dragHandleProps}>
-                                <LuGripVertical className="text-gray-600" />
+                              <div className="flex gap-2">
+                                <button
+                                  className="text-red-400 hover:text-red-800"
+                                  onClick={() => handleDelete(t._id)}
+                                >
+                                  <MdDeleteForever />
+                                </button>
+                                <div {...provided.dragHandleProps}>
+                                  <LuGripVertical className="text-gray-600" />
+                                </div>
                               </div>
                             </div>
                           )}
@@ -300,8 +342,16 @@ const Home = () => {
                                   ? t.title.slice(0, 20) + "..."
                                   : t.title}
                               </h2>
-                              <div {...provided.dragHandleProps}>
-                                <LuGripVertical className="text-gray-600" />
+                              <div className="flex gap-2">
+                                <button
+                                  className="text-red-400 hover:text-red-800"
+                                  onClick={() => handleDelete(t._id)}
+                                >
+                                  <MdDeleteForever />
+                                </button>
+                                <div {...provided.dragHandleProps}>
+                                  <LuGripVertical className="text-gray-600" />
+                                </div>
                               </div>
                             </div>
                           )}
