@@ -2,175 +2,17 @@ import HomeNoUser from "../components/HomeNoUser";
 import { LuGripVertical } from "react-icons/lu";
 import { IoCheckmarkDoneCircleOutline } from "react-icons/io5";
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
+import AddTaskModal from "../components/AddTaskModal";
+import { useContext, useState } from "react";
+import AllContext from "../contexts/AllContext";
 
 const Home = () => {
-  const user = {
-    uid: "YjA9GvEwXCc12345678",
-    email: "user@example.com",
-    emailVerified: true,
-    displayName: "John Doe",
-    photoURL: "https://i.ibb.co.com/c64xvsG/istockphoto-1329936184-612x612.jpg",
-    phoneNumber: "+1234567890",
-    providerData: [
-      {
-        providerId: "google.com",
-        uid: "123456789012345678901",
-        displayName: "John Doe",
-        email: "user@example.com",
-        photoURL:
-          "https://i.ibb.co.com/c64xvsG/istockphoto-1329936184-612x612.jpg",
-      },
-    ],
+  const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
+  const onClose = () => {
+    setIsAddTaskOpen(false);
   };
-  const tasks = [
-    {
-      title: "Buy groceries",
-      description: "Get milk, eggs, and bread from the store",
-      timestamp: "2025-02-21T10:30:00Z",
-      dueDate: "2025-02-22",
-      category: "To-Do",
-    },
-    {
-      title: "Finish project report",
-      description: "Complete the final draft and submit by Friday",
-      timestamp: "2025-02-20T15:45:00Z",
-      dueDate: "2025-02-23",
-      category: "In Progress",
-    },
-    {
-      title: "Book doctor appointment",
-      description: "Schedule an appointment with Dr. Smith for next week",
-      timestamp: "2025-02-19T09:15:00Z",
-      dueDate: "2025-02-25",
-      category: "To-Do",
-    },
-    {
-      title: "Plan weekend trip",
-      description: "Research destinations and book accommodation",
-      timestamp: "2025-02-18T18:00:00Z",
-      dueDate: "2025-02-24",
-      category: "In Progress",
-    },
-    {
-      title: "Pay electricity bill",
-      description: "Due by the 25th, pay online",
-      timestamp: "2025-02-17T12:30:00Z",
-      dueDate: "2025-02-25",
-      category: "InProgress",
-    },
-    {
-      title: "Car service",
-      description: "Oil change and tire rotation",
-      timestamp: "2025-02-16T14:00:00Z",
-      dueDate: "2025-02-26",
-      category: "To-Do",
-    },
-    {
-      title: "Team meeting",
-      description: "Discuss Q1 targets and performance",
-      timestamp: "2025-02-15T11:00:00Z",
-      dueDate: "2025-02-21",
-      category: "Done",
-    },
-    {
-      title: "Team Collect",
-      description: "Discuss Q1 targets and performance",
-      timestamp: "2025-02-15T11:00:00Z",
-      dueDate: "2025-02-21",
-      category: "To-Do",
-    },
-    {
-      title: "Team Collect",
-      description: "Discuss Q1 targets and performance",
-      timestamp: "2025-02-15T11:00:00Z",
-      dueDate: "2025-02-21",
-      category: "To-Do",
-    },
-    {
-      title: "Team Collect",
-      description: "Discuss Q1 targets and performance",
-      timestamp: "2025-02-15T11:00:00Z",
-      dueDate: "2025-02-21",
-      category: "To-Do",
-    },
-    {
-      title: "Dame meeting",
-      description: "Discuss Q1 targets and performance",
-      timestamp: "2025-02-15T11:00:00Z",
-      dueDate: "2025-02-21",
-      category: "Done",
-    },
-    {
-      title: "Workout session",
-      description: "Gym session at 6 PM",
-      timestamp: "2025-02-14T18:00:00Z",
-      dueDate: "2025-02-22",
-      category: "In Progress",
-    },
-    {
-      title: "Workout session",
-      description: "Gym session at 6 PM",
-      timestamp: "2025-02-14T18:00:00Z",
-      dueDate: "2025-02-22",
-      category: "In Progress",
-    },
-    {
-      title: "Workout session",
-      description: "Gym session at 6 PM",
-      timestamp: "2025-02-14T18:00:00Z",
-      dueDate: "2025-02-22",
-      category: "In Progress",
-    },
-    {
-      title: "Workout session",
-      description: "Gym session at 6 PM",
-      timestamp: "2025-02-14T18:00:00Z",
-      dueDate: "2025-02-22",
-      category: "In Progress",
-    },
-    {
-      title: "Read new book",
-      description: "Start reading 'Atomic Habits'",
-      timestamp: "2025-02-13T20:45:00Z",
-      dueDate: "2025-03-01",
-      category: "To-Do",
-    },
-    {
-      title: "Update resume",
-      description: "Add recent projects and skills",
-      timestamp: "2025-02-12T22:10:00Z",
-      dueDate: "2025-02-28",
-      category: "In Progress",
-    },
-    {
-      title: "Update resume",
-      description: "Add recent projects and skills",
-      timestamp: "2025-02-12T22:10:00Z",
-      dueDate: "2025-02-28",
-      category: "In Progress",
-    },
-    {
-      title: "Update resume",
-      description: "Add recent projects and skills",
-      timestamp: "2025-02-12T22:10:00Z",
-      dueDate: "2025-02-28",
-      category: "In Progress",
-    },
-    {
-      title: "Update resume",
-      description: "Add recent projects and skills",
-      timestamp: "2025-02-12T22:10:00Z",
-      dueDate: "2025-02-28",
-      category: "In Progress",
-    },
-    {
-      title: "Update resume",
-      description: "Add recent projects and skills",
-      timestamp: "2025-02-12T22:10:00Z",
-      dueDate: "2025-02-28",
-      category: "In Progress",
-    },
-  ];
+  const user = useContext(AllContext);
+  const tasks = [];
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -185,7 +27,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="hidden">
+      <div className="">
         <HomeNoUser />
       </div>
       <></>
@@ -208,7 +50,10 @@ const Home = () => {
               <p>{user.email}</p>
             </div>
           </div>
-          <button className="w-full px-4 py-2 bg-white/40 text-black dark:bg-black/60 dark:text-white hover:bg-white/80 dark:hover:bg-black/80 backdrop-blur-sm shadow-md rounded-lg">
+          <button
+            onClick={() => setIsAddTaskOpen(true)}
+            className="w-full px-4 py-2 bg-white/40 text-black dark:bg-black/60 dark:text-white hover:bg-white/80 dark:hover:bg-black/80 backdrop-blur-sm shadow-md rounded-lg"
+          >
             Add Task
           </button>
           <div></div>
@@ -335,6 +180,9 @@ const Home = () => {
           </div>
         </div>
       </div>
+
+      {/* Modals */}
+      <AddTaskModal isOpen={isAddTaskOpen} onClose={onClose} />
     </>
   );
 };

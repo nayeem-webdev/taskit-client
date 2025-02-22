@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import AllContext from "../contexts/AllContext";
 
@@ -87,9 +87,12 @@ const SignIn = () => {
       <div className="mt-6 text-center text-sm">
         <p className="text-gray-700">
           Already have an account?{" "}
-          <a href="/login" className="text-primary font-medium hover:underline">
+          <Link
+            to="/register"
+            className="text-primary font-medium hover:underline"
+          >
             Log In
-          </a>
+          </Link>
         </p>
       </div>
     </div>

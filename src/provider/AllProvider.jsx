@@ -21,7 +21,7 @@ const AllProvider = ({ children }) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  //## Create User
+  //## Update User
   const updateUser = (displayName, photoURL) => {
     const profileData = { displayName, photoURL };
     return updateProfile(auth.currentUser, profileData);
